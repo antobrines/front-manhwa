@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Voulez-vous vraiment le supprimer ?</h2>
+<mat-dialog-content>
+  <div class="text-center mt-5">
+    <button type="button" class="btn btn-main" [mat-dialog-close]="true">
+      Valider
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary rounded-0 ms-2"
+      (click)="onNoClick()"
+    >
+      Annuler
+    </button>
+  </div>
+</mat-dialog-content>

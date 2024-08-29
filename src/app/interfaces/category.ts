@@ -1,8 +1,9 @@
 export interface Category {
   _id: string;
-  id: number;
+  id: string;
   name: string;
   slug: string;
   nsfw?: boolean;
   nameTranslate?: string;
+  format?: string;
 }

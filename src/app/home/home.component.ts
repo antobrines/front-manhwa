@@ -1,137 +1,86 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ManhwaService } from '../services/manhwa.service';
 import { DatePipe } from '@angular/common';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
-import { Subscription } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
-import { Category } from '../interfaces/category';
-import { Manhwa } from '../interfaces/manhwa';
+import { LoaderComponent } from '../templates/loader/loader.component';
+import { LibrairyService } from './../services/librairy.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule, InfiniteScrollDirective],
+  imports: [
+    RouterModule,
+    InfiniteScrollDirective,
+    LoaderComponent,
+    MatTooltipModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  public manhwas: Array<Manhwa> = [];
-  private categories: Array<Category> = [];
-  public categoriesFiltered: Array<Category> = [];
-  private categoriesSelected: Array<string> = [];
-  public loading: boolean = false;
-  private page: number = 0;
-  private manhwasSubscription: Subscription = new Subscription();
-  public typesArray: { name: string; selected: boolean }[] = [
-    { name: 'Manhwa', selected: true },
-    { name: 'Roman', selected: false },
-    { name: 'Manhua', selected: false },
-    { name: 'One-shot', selected: false },
-    { name: 'Doujin', selected: false },
-    { name: 'Amérimanga', selected: false },
-  ];
+  private librairyS = inject(LibrairyService);
+  private manhwaS = inject(ManhwaService);
+  private datePipe = inject(DatePipe);
 
-  public sorttypesArray(): void {
-    this.typesArray.sort((a, b) => a.name.localeCompare(b.name));
-  }
+  manhwasLibrairy = this.librairyS.manhwasLibrairy;
+  librairies = this.librairyS.librairies;
+  manhwas = this.manhwaS.manhwas;
+  manhwaL = this.manhwaS.manhwaL;
+  page = this.manhwaS.page;
+  categories = this.manhwaS.categories;
+  categoriesFiltered = this.manhwaS.categoriesFiltered;
+  categoriesSelected = this.manhwaS.categoriesSelected;
+  loadingManhwas = this.manhwaS.loadingManhwas;
+  typesArray = this.manhwaS.typesArray;
+  isAdding = false;
+  apiName = this.manhwaS.apiName;
 
-  constructor(
-    private manhwaS: ManhwaService,
-    private datePipe: DatePipe,
-    private translate: TranslateService
-  ) {
-    this.getCategories();
-    this.sorttypesArray();
-    translate.use('fr');
-  }
-
-  async ngOnInit(): Promise<any> {
-    this.initData();
+  ngOnInit(): void {
+    this.librairyS.getManhwasFromLibrairy().subscribe();
+    this.librairyS.getAll().subscribe();
+    this.manhwaS.getManhwas().subscribe();
+    this.manhwaS.getCategories().subscribe();
   }
 
   ngOnDestroy(): void {
-    this.manhwasSubscription.unsubscribe();
+    this.manhwaS.manhwas.set([]);
+    this.manhwaS.categoriesSelected.set([]);
   }
 
-  initData() {
-    this.getManhwas();
+  onScroll() {
+    if (
+      !this.manhwaS.loadingManhwas() &&
+      this.manhwaL().count !== this.manhwaS.manhwas().length
+    ) {
+      this.manhwaS.changePage();
+    }
   }
 
-  private getManhwas() {
-    this.loading = true;
-    const typeSelected =
-      this.typesArray.find((type) => type.selected)?.name || null;
-    this.manhwasSubscription.add(
-      this.manhwaS
-        .getManhwas(this.page, this.categoriesSelected, typeSelected)
-        .subscribe({
-          next: (res: any) => {
-            this.manhwas = [...this.manhwas, ...res.body];
-            this.loading = false;
-          },
-          error: () => {
-            this.loading = false;
-          },
-        })
-    );
-  }
-
-  private getCategories() {
-    this.manhwaS.getCategories().subscribe((res: any) => {
-      this.categories = res.body;
-      this.categoriesFiltered = res.body
-        .map((category: any) => {
-          category.nameTranslate = this.translate.instant(category.name);
-          return category;
-        })
-        .sort((a: any, b: any) =>
-          a.nameTranslate.localeCompare(b.nameTranslate)
-        );
-    });
-  }
-
-  public onScroll() {
-    this.page++;
-    this.getManhwas();
-  }
-
-  public changeDate(date: Date): any {
+  changeDate(date: Date): any {
     return this.datePipe.transform(date, 'dd/MM/yyyy');
   }
 
-  public async addAnimeList(idAnime: number, idList: number) {}
-
-  public changeRating(event: any) {}
-
-  public changeStatus(name: string) {
-    this.page = 0;
-    this.manhwas = [];
-    this.typesArray = this.typesArray.map((type) => {
-      if (type.name === name) {
-        type.selected = !type.selected;
-      } else {
-        type.selected = false;
-      }
-      return type;
-    });
-    this.getManhwas();
-  }
-
-  public searchCategory(event: any) {
-    this.categoriesFiltered = this.categories.filter((category: Category) => {
-      return category.nameTranslate
-        ?.toLowerCase()
-        .includes(event.target.value.toLowerCase());
+  async addAnimeList(idAnime: string, idList: string) {
+    this.isAdding = true;
+    this.librairyS.addManhwaToLibrairy(idList, idAnime).subscribe(() => {
+      this.librairyS.getManhwasFromLibrairy().subscribe(() => {
+        this.isAdding = false;
+      });
     });
   }
 
-  public filterCategory(slug: string) {
-    this.categoriesSelected = this.categoriesSelected.includes(slug)
-      ? this.categoriesSelected.filter((category: any) => category !== slug)
-      : [...this.categoriesSelected, slug];
-    this.page = 0;
-    this.manhwas = [];
-    this.getManhwas();
+  changeType(name: string) {
+    this.manhwaS.changeType(name);
+  }
+
+  searchCategory(event: any) {
+    this.manhwaS.searchCategories(event.target.value);
+  }
+
+  filterCategory(id: string) {
+    console.log(id);
+    this.manhwaS.filterCategory(id);
   }
 }

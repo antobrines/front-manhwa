@@ -16,19 +16,19 @@
           <hr class="bg-main my-2">
           <li class="d-flex align-items-center mb-1">
             <img src="assets/img/SVG/heart.svg" width="20">
-            <a class="item-nav mx-2" [routerLink]="['/animes-list']">Mes Animés</a>
+            <a class="item-nav mx-2" [routerLink]="['/librairies']">Mes Animés</a>
           </li>
           <hr class="bg-main my-2">
-          <li class="d-flex align-items-center mb-1" (click)="logout()">
+          <!-- <li class="d-flex align-items-center mb-1" (click)="logout()">
             <img src="assets/img/SVG/logout.svg" width="20">
             <a class="item-nav mx-2 pointer">Déconnexion</a>
-          </li>
+          </li> -->
           <hr class="bg-main my-2">
         </ul>
         <div class="search-input d-flex position-relative w-100">
           <img src="assets/img/SVG/search.svg">
           <input type="text" class="form-control form-input m-0" (keyup.enter)="onEnter()" id="search"
-            [(ngModel)]="search">
+            [(ngModel)]="text">
         </div>
       </div>
     </div>
@@ -40,24 +40,26 @@
         <div class="col-6 d-flex align-items-center">
           <a class="me-5" routerLink="/"><img src="assets/img/logo-simple.png" class="logo"></a>
           <a class="item-nav pe-2" routerLink="/">Découvrir</a>
-          <a class="item-nav" [routerLink]="['/animes-list']">Mes Animés</a>
-          <a class="item-nav pointer" (click)="logout()">Déconnexion</a>
+          <a class="item-nav" [routerLink]="['/librairies']">Mes Animés</a>
+          <!-- <a class="item-nav pointer" (click)="logout()">Déconnexion</a> -->
         </div>
   
         <div class="col-6 d-flex justify-content-end align-items-center">
           <div class="search-input d-flex position-relative me-5">
             <img src="assets/img/SVG/search.svg">
             <input type="text" class="form-control form-input m-0" (keyup.enter)="onEnter()" id="search"
-              [(ngModel)]="search">
+            [(ngModel)]="text">
           </div>
   
           <div class="dropdown">
-            <a class="hover-zoom d-flex flex-column align-items-center" title="Mon Compte" id="dropdownMenuButton1"
+            <a class="hover-zoom d-flex flex-column align-items-center cursorPointer" title="Mon Compte" id="dropdownMenuButton1"
               data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="assets/img/SVG/profile.svg" width="40" height="40">
+              <img src="../../../assets/img/SVG/profile.svg" width="40" height="40">
             </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><span class="dropdown-item cursorPointer" (click)="logout()">Déconnexion</span></li>
+            </ul>
           </div>
-  
         </div>
       </div>
     </div>

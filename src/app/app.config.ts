@@ -2,14 +2,21 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter, Router } from '@angular/router';
 
 import { routes } from './app.routes';
-import { HttpClient, HttpClientModule, provideHttpClient, withInterceptorsFromDi  } from '@angular/common/http';
-import { JwtModule } from "@auth0/angular-jwt";
+import {
+  HttpClient,
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import { JwtModule } from '@auth0/angular-jwt';
 import { DatePipe } from '@angular/common';
-import { TranslateModule, TranslateLoader  } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { authInterceptor } from './auth.interceptor';
 
 export function tokenGetter() {
-  return localStorage.getItem("token");
+  return localStorage.getItem('token');
 }
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -20,23 +27,24 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     importProvidersFrom(
       JwtModule.forRoot({
-          config: {
-              tokenGetter: tokenGetter,
-              allowedDomains: ["localhost:3000"],
-          },
+        config: {
+          tokenGetter: tokenGetter,
+          allowedDomains: ['localhost:3000'],
+        },
       }),
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClient]
-        }
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient],
+        },
       })
     ),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideHttpClient(
-      withInterceptorsFromDi()
+      withInterceptorsFromDi(),
+      withInterceptors([authInterceptor])
     ),
     DatePipe,
-  ]
+  ],
 };

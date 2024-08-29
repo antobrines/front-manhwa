@@ -1,0 +1,207 @@
+<section>
+  <div class="container my-5">
+    <div class="row align-items-start">
+      <div
+        class="col-md-3 nav flex-column nav-pills mb-4 mb-md-0"
+        id="v-pills-tab"
+        role="tablist"
+        aria-orientation="vertical"
+      >
+        @for (librairy of librairies(); track $index) {
+        <button
+          [ngClass]="{ active: librairy.name == 'En cours' }"
+          class="nav-link noselect"
+          id="v-pills-1-tab"
+          data-bs-toggle="pill"
+          [attr.data-bs-target]="'#v-pills-' + librairy._id"
+          type="button"
+          role="tab"
+          aria-controls="v-pills-1"
+          aria-selected="true"
+          (click)="getOne(librairy._id)"
+        >
+          @if (!librairy.isRemovable) {
+          <img
+            [attr.src]="
+              '../../assets/img/SVG/userlists/' + librairy.slug + '.svg'
+            "
+            class="img-fluid icon-nav icon-main"
+            height="20"
+            width="20"
+          />
+          } @else {
+          <img
+            [attr.src]="'../../assets/img/SVG/userlists/custom.svg'"
+            class="img-fluid icon-nav icon-main"
+            height="20"
+            width="20"
+          />
+          }
+          {{ librairy.name }} ({{ librairy.manhwasPersonnal.length }}) @if
+          (librairy.isRemovable) {
+          <img
+            class="icon-main cursorPointer float-end delete-list"
+            src="../../../assets/img/SVG/close.svg"
+            width="20"
+            heigth="20"
+            data-bs-toggle="modal"
+            data-bs-target="#validateModal"
+          />
+          }
+        </button>
+        }
+        <!-- <button
+          class="btn btn-main mt-4"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          <img
+            src="../../assets/img/SVG/add.svg"
+            class="img-fluid icon-nav icon-white"
+            height="20"
+            width="20"
+          />
+          Ajouter une liste personnalisée
+        </button> -->
+      </div>
+      @if (loading) {
+      <app-loader></app-loader>
+      }
+      <div class="col-md-9 tab-content" id="v-pills-tabContent">
+        @if (!loading && librairy()?.manhwasPersonnal?.length === 0) {
+        <p>Pas d'animés dans cette librairie</p>
+        }
+        <div class="row">
+          @for (item of librairy()?.manhwasPersonnal; track $index;) {
+          <div class="col-lg-4 col-sm-6 hover-card">
+            <div class="pb-5">
+              <img
+                class="img-fluid cursorPointer"
+                [src]="
+                  item.manhwa.smallImage
+                    ? item.manhwa.smallImage
+                    : 'assets/img/noimage-small.png'
+                "
+                alt="manhwa"
+                [matTooltip]="
+                  'Voir la fiche de &quot;' + item.manhwa.title_en
+                    ? item.manhwa.title_en
+                    : item.manhwa.title + '&quot;'
+                "
+                [matTooltipPosition]="'after'"
+                [routerLink]="['/manhwa', item.manhwa.id]"
+              />
+              <p
+                class="mb-0 mt-1 fw-bold"
+              >
+                {{
+                  item.manhwa.title_en
+                    ? item.manhwa.title_en
+                    : item.manhwa.title
+                }}
+                @if (item.url) {
+                <a href="{{ item.url }}" target="_blank">
+                  <img
+                    src="../../assets/img/SVG/eye.svg"
+                    class="img-fluid"
+                    height="20"
+                    width="20"
+                    [matTooltip]="'Lire le manhwa'"
+                  />
+                </a>
+                }
+              </p>
+              <div class="d-flex">
+                <small>
+                  <input
+                    class="form-control small-input"
+                    id="numView"
+                    type="number"
+                    value="{{ item.nbChapterViewed }}"
+                    matTooltip="Chapitre lu"
+                    (change)="updateNbChapterViewed($event, item._id)"
+                    [disabled]="disabled"
+                  />
+                </small>
+                <div class="ms-auto d-flex  ">
+                  <button
+                    class="border-0 bg-transparent me-3"
+                    type="button"
+                    (click)="openDialog(item._id, currentLibrairyId, item.url)"
+                  >
+                    <img
+                      src="../../assets/img/SVG/link.svg"
+                      class="img-fluid icon-main"
+                      height="20"
+                      width="20"
+                      [matTooltip]="
+                        item.url ? 'Modifier le lien' : 'Ajouter un lien'
+                      "
+                    />
+                  </button>
+                  <button class="border-0 bg-transparent p-0">
+                    <img
+                      class="img-fluid icon-main"
+                      src="../../assets/img/SVG/remove.svg"
+                      height="20"
+                      width="20"
+                      (click)="
+                        removeManhwaFromLibrairy(
+                          librairy()?._id,
+                          item.manhwa.id
+                        )
+                      "
+                      matTooltip="Retirer de la liste"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="validateModal"
+  tabindex="-1"
+  aria-labelledby="validateModal"
+  aria-hidden="true"
+  data-keyboard="false"
+  data-backdrop="static"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Suppression d'une liste</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>ttt</p>
+        <div class="text-center mt-5">
+          <button type="button" class="btn btn-main" data-bs-dismiss="modal">
+            Valider
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary rounded-0 ms-2"
+            data-bs-dismiss="modal"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

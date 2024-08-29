@@ -216,5 +216,11 @@
   "Shounen": "Shounen",
   "Seinen": "Seinen",
   "Josei": "Josei",
-  "Isekai": "Isekai"
+  "Isekai": "Isekai",
+  "current": "En Cours",
+  "finished": "Finis",
+  "tba": "À Venir",
+  "unreleased": "Non Sortis",
+  "upcoming": "À Venir",
+  "ongoing": "En Cours"
 }

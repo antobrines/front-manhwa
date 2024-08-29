@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { HeaderComponent } from './templates/header/header.component';
 import { FooterComponent } from './templates/footer/footer.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { LoginComponent } from './user/login/login.component';
 import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +14,12 @@ import { AuthService } from './services/auth.service';
     HeaderComponent,
     FooterComponent,
     RouterOutlet,
-    NgClass,
     LoginComponent,
     RouterLink,
     RouterLinkActive,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'subarashii';
@@ -28,7 +27,8 @@ export class AppComponent {
   private urls = ['/login', '/register'];
   private logoutSubscription!: Subscription;
 
-  constructor(private authS: AuthService) {
+  constructor(private authS: AuthService, translate: TranslateService) {
+    translate.setDefaultLang('fr');
     this.showTemplate = !this.urls.includes(location.pathname);
   }
 
