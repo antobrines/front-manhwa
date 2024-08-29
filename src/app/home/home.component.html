@@ -137,7 +137,7 @@
             <img
               class="img-fluid cursorPointer"
               [src]="
-                manhwa.image ? manhwa.image : '../../assets/img/noimage.png'
+                manhwa.image ? getUrlImage(manhwa.image) : '../../assets/img/noimage.png'
               "
               [routerLink]="['/manhwa', manhwa.id]"
               matTooltip="Voir la fiche de &quot;{{ manhwa.title }}&quot;"

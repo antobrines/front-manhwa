@@ -6,6 +6,7 @@ import { LoaderComponent } from '../templates/loader/loader.component';
 import { TranslateService } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LibrairyService } from '../services/librairy.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-manhwa',
@@ -65,5 +66,12 @@ export class ManhwaComponent {
     this.librairyS.addManhwaToLibrairy(id, manhwaId).subscribe(() => {
       this.librairyS.getManhwasFromLibrairy().subscribe();
     });
+  }
+
+  public getUrlImage(url: string | undefined) {
+    if (!url) {
+      return '';
+    }
+    return `${environment.backUrl}proxy-image?url=${encodeURIComponent(url)}`;
   }
 }

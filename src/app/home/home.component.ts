@@ -6,6 +6,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { LoaderComponent } from '../templates/loader/loader.component';
 import { LibrairyService } from './../services/librairy.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -82,5 +83,12 @@ export class HomeComponent implements OnInit {
   filterCategory(id: string) {
     console.log(id);
     this.manhwaS.filterCategory(id);
+  }
+
+  public getUrlImage(url: string | undefined) {
+    if (!url) {
+      return '';
+    }
+    return `${environment.backUrl}proxy-image?url=${encodeURIComponent(url)}`;
   }
 }

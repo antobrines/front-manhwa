@@ -4,7 +4,7 @@
     background:
       'linear-gradient(rgba(21, 32, 43, 0.5), rgba(21, 32, 43, 0.5)), url(' +
       (manhwa()?.coverImage
-        ? manhwa()?.coverImage
+        ? getUrlImage(manhwa()?.coverImage)
         : 'assets/img/cover-image.png') +
       ')'
   }"
@@ -104,7 +104,7 @@
               class="img-fluid"
               [src]="
                 manhwa()?.image
-                  ? manhwa()?.image
+                  ? getUrlImage(manhwa()?.image)
                   : '../../assets/img/noimage.png'
               "
             />
