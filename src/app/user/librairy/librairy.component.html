@@ -79,9 +79,7 @@
               <img
                 class="img-fluid cursorPointer"
                 [src]="
-                  item.manhwa.smallImage
-                    ? item.manhwa.smallImage
-                    : 'assets/img/noimage-small.png'
+                  getUrlImage(item.manhwa.image)
                 "
                 alt="manhwa"
                 [matTooltip]="

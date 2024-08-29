@@ -1,19 +1,14 @@
 import { NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LibrairyService } from '../../services/librairy.service';
 import { LoaderComponent } from '../../templates/loader/loader.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogTitle,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { LibrairyUrlComponent } from '../../modals/librairy-url/librairy-url.component';
 import { RemoveListComponent } from '../../modals/remove-list/remove-list.component';
-
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-manhwa',
   standalone: true,
@@ -92,5 +87,12 @@ export class LibrairyComponent implements OnInit, OnDestroy {
       data: { id, librairyId, url },
       width: '300px',
     });
+  }
+
+  public getUrlImage(url: string | undefined) {
+    if (!url) {
+      return '';
+    }
+    return `${environment.backUrl}proxy-image?url=${encodeURIComponent(url)}`;
   }
 }
