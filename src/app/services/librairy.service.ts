@@ -28,9 +28,13 @@ export class LibrairyService {
       );
   }
 
-  public getOne(id: string): Observable<LibrairyInfo> {
+  public getOne(id: string, sort?: string): Observable<LibrairyInfo> {
     return this.http
-      .get<Response<LibrairyInfo>>(environment.backUrl + 'librairies/' + id)
+      .get<Response<LibrairyInfo>>(environment.backUrl + 'librairies/' + id, {
+        params: {
+          sort: sort || 'nbChapterViewedDesc',
+        },
+      })
       .pipe(
         tap((librairy: Response<LibrairyInfo>) => {
           this.librairy.set(librairy.body);

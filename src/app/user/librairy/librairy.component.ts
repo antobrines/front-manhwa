@@ -32,12 +32,13 @@ export class LibrairyComponent implements OnInit, OnDestroy {
   loading = false;
   disabled = false;
   currentLibrairyId = '';
+  isList = false;
 
   ngOnInit() {
     this.loading = true;
     this.librairyS.getAll().subscribe((librairies) => {
       if (librairies.length > 0) {
-        this.getOne(librairies[0]._id);
+        this.getOne(librairies[0]._id, 'nbChapterViewedDesc');
       }
       this.loading = false;
     });
@@ -47,9 +48,9 @@ export class LibrairyComponent implements OnInit, OnDestroy {
     this.librairyS.librairy.set(null);
   }
 
-  public getOne(id: string) {
+  public getOne(id: string, sort?: string) {
     this.loading = true;
-    this.librairyS.getOne(id).subscribe(() => {
+    this.librairyS.getOne(id, sort).subscribe(() => {
       this.currentLibrairyId = id;
       this.loading = false;
     });
@@ -94,5 +95,16 @@ export class LibrairyComponent implements OnInit, OnDestroy {
       return '';
     }
     return `${environment.backUrl}proxy-image?url=${encodeURIComponent(url)}`;
+  }
+
+  public changeIsList() {
+    this.isList = !this.isList;
+  }
+
+  public sortManhwa(event: any, id?: string) {
+    if (!id) {
+      return;
+    }
+    this.getOne(id, event.target.value);
   }
 }
