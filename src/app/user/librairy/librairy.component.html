@@ -118,7 +118,7 @@
         </div>
         <div
           class="row"
-          [hidden]="!isList || librairy()?.manhwasPersonnal?.length === 0"
+          [hidden]="!isList || librairy()?.manhwasPersonnal?.length === 0  || loading"
         >
           <div class="col-lg-12">
             <div class="">
@@ -173,7 +173,7 @@
         </div>
         <div class="row">
           @for (item of librairy()?.manhwasPersonnal; track $index;) {
-          <div class="col-lg-2 col-md-4 col-sm-6 hover-card" [hidden]="isList">
+          <div class="col-lg-2 col-md-4 col-sm-6 hover-card" [hidden]="isList || loading">
             <div class="pb-5">
               <img
                 class="img-fluid cursorPointer"
