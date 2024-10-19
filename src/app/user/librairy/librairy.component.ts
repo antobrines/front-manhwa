@@ -26,7 +26,7 @@ export class LibrairyComponent implements OnInit, OnDestroy {
   private librairyS = inject(LibrairyService);
   private dialog = inject(MatDialog);
 
-  basicList: any[] = ['planned', 'current', 'completed', 'on_old'];
+  basicList: any[] = ['current', 'planned', 'completed', 'on_old'];
   librairies = this.librairyS.librairies;
   librairy = this.librairyS.librairy;
   loading = false;
@@ -38,7 +38,14 @@ export class LibrairyComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.librairyS.getAll().subscribe((librairies) => {
       if (librairies.length > 0) {
-        this.getOne(librairies[0]._id, 'nbChapterViewedDesc');
+        const current = librairies.find(
+          (librairy) => librairy.slug === 'current'
+        );
+        if (current) {
+          this.getOne(current._id);
+        } else {
+          this.getOne(librairies[0]._id);
+        }
       }
       this.loading = false;
     });
