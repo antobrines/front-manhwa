@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backUrl: 'http://localhost:3000/api/',
+  backUrl: 'http://abrines:3000/api/',
   version: '1.0.0',
 };
 

@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { LibrairyUrlComponent } from '../../modals/librairy-url/librairy-url.component';
 import { RemoveListComponent } from '../../modals/remove-list/remove-list.component';
 import { environment } from '../../../environments/environment';
+import { TableModule } from 'primeng/table';
+
 @Component({
   selector: 'app-manhwa',
   standalone: true,
@@ -18,6 +20,7 @@ import { environment } from '../../../environments/environment';
     ReactiveFormsModule,
     LoaderComponent,
     MatTooltipModule,
+    TableModule,
   ],
   templateUrl: './librairy.component.html',
   styleUrl: './librairy.component.css',
@@ -27,8 +30,10 @@ export class LibrairyComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
 
   basicList: any[] = ['current', 'planned', 'completed', 'on_old'];
+
   librairies = this.librairyS.librairies;
   librairy = this.librairyS.librairy;
+
   loading = false;
   disabled = false;
   currentLibrairyId = '';
@@ -79,6 +84,21 @@ export class LibrairyComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  public updateManhwaFromLibrairy(
+    fromList: string,
+    toList: string,
+    manhwaId: string
+  ) {
+    this.librairyS
+      .updateManhwaFromLibrairy(fromList, toList, manhwaId)
+      .subscribe(() => {
+        this.getOne(fromList);
+        this.librairyS.getAll().subscribe(() => {
+          console.log('done');
+        });
+      });
   }
 
   public updateNbChapterViewed(event: any, id: string) {

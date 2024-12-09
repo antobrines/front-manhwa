@@ -57,6 +57,27 @@ export class LibrairyService {
     );
   }
 
+  public updateManhwaFromLibrairy(
+    fromList: string,
+    toList: string,
+    manhwaId: string
+  ): Observable<any> {
+    return this.http.put(
+      environment.backUrl +
+        'librairies/' +
+        fromList +
+        '/manhwa/' +
+        manhwaId +
+        '/new-librairy/' +
+        toList,
+      {
+        params: {
+          apiName: this.manhwaService.apiName,
+        },
+      }
+    );
+  }
+
   public addManhwaToLibrairy(id: string, manhwaId: string): Observable<any> {
     return this.http.post(
       environment.backUrl + 'librairies/' + id + '/manhwa/' + manhwaId,

@@ -1,0 +1,59 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    command:
+      - "--label-enable"
+      - "--interval"
+      - "30"
+      - "--rolling-restart"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+  reverse-proxy:
+      image: traefik:v3.1
+      command:
+        - "--api.insecure=true"
+        - "--providers.docker=true"
+        # add tls
+        # - "--providers.docker.exposedbydefault=false"
+        # - "--entryPoints.websecure.address=:443"
+        # - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+        # - "--certificatesresolvers.myresolver.acme.email=antonin.brines@outlook.fr"
+        # - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+        # redirect http to https
+        - "--entryPoints.web.address=:80"
+        # - "--entryPoints.web.http.redirections.entryPoint.to=websecure"
+        # - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
+      ports:
+        - "80:80"
+        # - "443:443"
+        - "8080:8080"
+      volumes:
+        - letsencrypt:/letsencrypt
+        - "/var/run/docker.sock:/var/run/docker.sock"
+      networks:
+        - traefik-public
+
+  manhwa-front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      # - "traefik.enable=true"
+      - "traefik.http.routers.manhwa-front.rule=Host(`abrines.fr`)"
+      # - "traefik.http.routers.manhwa-front.entrypoints=websecure"
+      # - "traefik.http.routers.manhwa-front.tls.certresolver=myresolver"
+      - "com.centurylinklabs.watchtower.enable=true"
+    deploy:
+      mode: replicated
+      replicas: 3
+    networks:
+      - traefik-public
+
+volumes:
+  letsencrypt:
+
+networks:
+  traefik-public:  # Déclarez le réseau
+    external: true
+  
