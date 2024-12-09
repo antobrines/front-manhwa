@@ -35,9 +35,7 @@ services:
         - traefik-public
 
   manhwa-front:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/antobrines/front-manhwa:latest
     labels:
       # - "traefik.enable=true"
       - "traefik.http.routers.manhwa-front.rule=Host(`abrines.fr`)"

@@ -22,7 +22,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'subarashii';
+  title = 'Manhwa';
   public showTemplate: boolean = true;
   private urls = ['/login', '/register'];
   private logoutSubscription!: Subscription;
