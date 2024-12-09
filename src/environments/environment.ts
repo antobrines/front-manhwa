@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backUrl: 'http://abrines:3000/api/',
+  backUrl: 'https://api.manhwa.abrines.fr/api/',
   version: '1.0.0',
 };
 

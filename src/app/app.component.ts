@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from './templates/header/header.component';
 import { FooterComponent } from './templates/footer/footer.component';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
 import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
@@ -22,26 +22,37 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'Manhwa';
-  public showTemplate: boolean = true;
-  private urls = ['/login', '/register'];
-  private logoutSubscription!: Subscription;
+  private authS = inject(AuthService);
+  private router = inject(Router);
+  private translate = inject(TranslateService);
 
-  constructor(private authS: AuthService, translate: TranslateService) {
-    translate.setDefaultLang('fr');
-    this.showTemplate = !this.urls.includes(location.pathname);
-  }
+  title = 'Manhwa';
+  public showTemplate: boolean = false;
+  private urls = ['/login', '/register'];
+  private logoutSubscription: Subscription = new Subscription();
+  private routerSubscriptions: Subscription = new Subscription();
 
   ngOnInit() {
-    this.logoutSubscription = this.authS.logout$.subscribe(() => {
-      this.handleLogout();
-    });
+    this.translate.setDefaultLang('fr');
+
+    this.logoutSubscription.add(
+      this.authS.logout$.subscribe(() => {
+        this.handleLogout();
+      })
+    );
+
+    this.routerSubscriptions.add(
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.showTemplate = this.urls.includes(event.url) ? false : true;
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
-    if (this.logoutSubscription) {
-      this.logoutSubscription.unsubscribe();
-    }
+    this.logoutSubscription.unsubscribe();
+    this.routerSubscriptions.unsubscribe();
   }
 
   handleLogout() {
