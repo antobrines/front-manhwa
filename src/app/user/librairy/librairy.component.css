@@ -11,6 +11,11 @@ section {
   border: 0;
 }
 
+a {
+  color: #3b76e1;
+  text-decoration: none;
+}
+
 .btn-main:hover img {
   filter: invert(51%) sepia(62%) saturate(5708%) hue-rotate(337deg)
     brightness(103%) contrast(101%);
@@ -149,3 +154,16 @@ input[type="checkbox"]:checked + .genres-label {
 }
 
 
+.sticky-content {
+  position: sticky;
+  top: calc(var(--header-height, 60px) + 20px); /* Ajustez la hauteur du header */
+  height: auto; /* S'assure que la hauteur est adaptée au contenu */
+  overflow-y: hidden; /* Pas de défilement vertical */
+}
+
+.sticky-top {
+  position: sticky;
+  top: calc(var(--header-height, 60px) + 20px);
+  z-index: 1050; /* Pour s'assurer que le contenu reste visible au-dessus des autres éléments */
+  background-color: white; /* Optionnel : fond blanc pour mieux visualiser le contenu */
+}

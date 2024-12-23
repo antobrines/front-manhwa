@@ -15,7 +15,7 @@
   <div class="container my-5">
     <div class="row align-items-start">
       <div
-        class="col-md-2 nav flex-column nav-pills mb-4 mb-md-0"
+        class="col-md-2 nav flex-column nav-pills mb-4 mb-md-0 sticky-content"
         id="v-pills-tab"
         role="tablist"
         aria-orientation="vertical"
@@ -72,7 +72,7 @@
         <p>Pas d'animés dans cette librairie</p>
         }
         <div
-          class="row align-items-center"
+          class="row align-items-center sticky-top bg-white"
           [hidden]="loading || librairy()?.manhwasPersonnal?.length === 0"
         >
           <div class="col-md-6">
@@ -209,7 +209,7 @@
                     "
                   />
                 </button>
-                <span class="dropdown border-0 bg-transparent">
+                <div class="dropdown d-inline-block">
                   <button
                     class="border-0 bg-transparent dropdown"
                     [attr.id]="'dropdownMenuButton' + item.manhwa.id"
@@ -239,13 +239,15 @@
                         )
                       "
                     >
-                      <a class="dropdown-item cursorPointer">{{
-                        librairy.name
-                      }}</a>
+                      <a
+                        class="dropdown-item cursorPointer"
+                        style="color: #ff473f"
+                        >{{ librairy.name }}</a
+                      >
                     </li>
                     } }
                   </ul>
-                </span>
+                </div>
                 <button class="border-0 bg-transparent p-0">
                   <img
                     class="img-fluid icon-main"
