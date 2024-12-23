@@ -29,6 +29,11 @@ export class LibrairyUrlComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    const stickyHeader = document.querySelector('.sticky-top');
+    stickyHeader?.classList.remove('hidden');
+  }
+
   updateUrl() {
     if (!this.url.value) {
       return;

@@ -111,6 +111,9 @@ export class LibrairyComponent implements OnInit, OnDestroy {
   }
 
   public openDialog(id: string, librairyId: string, url?: string) {
+    const stickyHeader = document.querySelector('.sticky-top');
+    stickyHeader?.classList.add('hidden');
+
     this.dialog.open(LibrairyUrlComponent, {
       data: { id, librairyId, url },
       width: '300px',

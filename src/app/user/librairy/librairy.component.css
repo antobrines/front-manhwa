@@ -164,6 +164,11 @@ input[type="checkbox"]:checked + .genres-label {
 .sticky-top {
   position: sticky;
   top: calc(var(--header-height, 60px) + 20px);
-  z-index: 1050; /* Pour s'assurer que le contenu reste visible au-dessus des autres éléments */
+  height: auto;
+  z-index: 1; /* Pour s'assurer que le contenu reste visible au-dessus des autres éléments */
   background-color: white; /* Optionnel : fond blanc pour mieux visualiser le contenu */
+}
+
+.hidden {
+  display: none;
 }
