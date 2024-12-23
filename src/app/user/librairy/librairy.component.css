@@ -73,11 +73,6 @@ svg {
   vertical-align: middle;
 }
 
-a {
-  color: #3b76e1;
-  text-decoration: none;
-}
-
 .badge-soft-danger {
   color: #f56e6e !important;
   background-color: rgba(245, 110, 110, 0.1);
@@ -144,4 +139,13 @@ input[type="checkbox"]:checked + .genres-label {
 .dropdown:hover .dropdown-menu {
   display: block;
 }
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
+}
+
 

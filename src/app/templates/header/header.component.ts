@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ManhwaService } from '../../services/manhwa.service';
@@ -13,16 +13,21 @@ import { ManhwaService } from '../../services/manhwa.service';
 })
 export class HeaderComponent implements OnInit {
   private manhwaS = inject(ManhwaService);
+  private authS = inject(AuthService);
+  private router = inject(Router);
+
   search = this.manhwaS.search;
+  canSearch: boolean = true;
   text: string = '';
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authS: AuthService
-  ) {}
-
-  async ngOnInit() {}
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.canSearch = ['/'].includes(event.url) ? true : false;
+        this.text = '';
+      }
+    });
+  }
 
   onEnter() {
     if (this.text === '') {

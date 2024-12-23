@@ -42,5 +42,6 @@ testem.log
 Thumbs.db
 
 .env
+.env.production
 src/environments/environment.custom.ts
 .vercel

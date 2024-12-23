@@ -8,7 +8,7 @@ import { LibrairyComponent } from './user/librairy/librairy.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent, canActivate: [authGuard] },
-  { path: 'manhwa/:id', component: ManhwaComponent },
-  { path: 'librairies', component: LibrairyComponent },
+  { path: 'manhwa/:id', component: ManhwaComponent, canActivate: [authGuard] },
+  { path: 'librairies', component: LibrairyComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },
 ];

@@ -52,9 +52,6 @@ services:
       - "traefik.http.routers.manhwa-front-redirect.middlewares=https-redirect"
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
       - "com.centurylinklabs.watchtower.enable=true"
-    deploy:
-      mode: replicated
-      replicas: 3
     networks:
       - traefik-public
 

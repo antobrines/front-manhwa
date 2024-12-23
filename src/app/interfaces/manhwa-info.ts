@@ -6,4 +6,5 @@ export interface ManhwaInfo {
   _id: string;
   nbChapterViewed?: number;
   url?: string;
+  nbChapters?: number;
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  private authS = inject(AuthService);
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [
@@ -19,7 +21,6 @@ export class LoginComponent {
       Validators.minLength(3),
     ]),
   });
-  constructor(private authS: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
 
