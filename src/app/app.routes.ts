@@ -4,11 +4,17 @@ import { HomeComponent } from './home/home.component';
 import { ManhwaComponent } from './manhwa/manhwa.component';
 import { authGuard } from './auth.guard';
 import { LibrairyComponent } from './user/librairy/librairy.component';
+import { RegisterComponent } from './user/register/register.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent, canActivate: [authGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [authGuard] },
   { path: 'manhwa/:id', component: ManhwaComponent, canActivate: [authGuard] },
-  { path: 'librairies', component: LibrairyComponent, canActivate: [authGuard] },
+  {
+    path: 'librairies',
+    component: LibrairyComponent,
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: '' },
 ];

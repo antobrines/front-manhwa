@@ -156,9 +156,9 @@
                   class="form-control small-input"
                   id="numView"
                   type="number"
-                  value="{{ item.nbChapterViewed }}"
+                  [(ngModel)]="item.nbChapterViewed"
                   matTooltip="Chapitre lu"
-                  (change)="updateNbChapterViewed($event, item._id)"
+                  (change)="updateNbChapterViewed(item._id)"
                   [disabled]="disabled"
                 />
               </td>
@@ -300,11 +300,11 @@
                 <small>
                   <input
                     class="form-control small-input"
-                    id="numView"
+                    id="numView-{{ item._id }}"
                     type="number"
-                    value="{{ item.nbChapterViewed }}"
+                    [(ngModel)]="item.nbChapterViewed"
                     matTooltip="Chapitre lu"
-                    (change)="updateNbChapterViewed($event, item._id)"
+                    (change)="updateNbChapterViewed(item._id)"
                     [disabled]="disabled"
                   />
                 </small>

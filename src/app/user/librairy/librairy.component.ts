@@ -1,6 +1,12 @@
 import { NgClass } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LibrairyService } from '../../services/librairy.service';
 import { LoaderComponent } from '../../templates/loader/loader.component';
@@ -21,6 +27,7 @@ import { TableModule } from 'primeng/table';
     LoaderComponent,
     MatTooltipModule,
     TableModule,
+    FormsModule,
   ],
   templateUrl: './librairy.component.html',
   styleUrl: './librairy.component.css',
@@ -101,13 +108,23 @@ export class LibrairyComponent implements OnInit, OnDestroy {
       });
   }
 
-  public updateNbChapterViewed(event: any, id: string) {
+  public updateNbChapterViewed(id: string) {
     this.disabled = true;
-    this.librairyS
-      .updateNbChapterViewed(id, event.target.value)
-      .subscribe(() => {
-        this.disabled = false;
-      });
+    const updatedManhwa = this.librairy()?.manhwasPersonnal.find(
+      (item) => item._id === id
+    );
+    if (updatedManhwa && updatedManhwa.nbChapterViewed !== undefined) {
+      this.librairyS
+        .updateNbChapterViewed(id, updatedManhwa.nbChapterViewed)
+        .subscribe(() => {
+          this.disabled = false;
+          // this.librairyS.getOne(this.currentLibrairyId).subscribe(() => {
+          //   this.cd.detectChanges();
+          // });
+        });
+    } else {
+      this.disabled = false;
+    }
   }
 
   public openDialog(id: string, librairyId: string, url?: string) {
@@ -118,6 +135,10 @@ export class LibrairyComponent implements OnInit, OnDestroy {
       data: { id, librairyId, url },
       width: '300px',
     });
+  }
+
+  public trackByIndex(index: number, item: any): any {
+    return item._id || index;
   }
 
   public getUrlImage(url: string | undefined) {

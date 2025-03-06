@@ -4,14 +4,13 @@ import {
   MAT_DIALOG_DATA,
   MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { LibrairyService } from '../../services/librairy.service';
 
 @Component({
   selector: 'app-librairy-url',
   standalone: true,
-  imports: [ReactiveFormsModule, MatDialogContent, MatDialogTitle],
+  imports: [ReactiveFormsModule, MatDialogContent],
   templateUrl: './librairy-url.component.html',
   styleUrl: './librairy-url.component.css',
 })

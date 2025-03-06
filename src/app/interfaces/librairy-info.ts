@@ -1,4 +1,3 @@
-import { Manhwa } from './manhwa';
 import { ManhwaInfo } from './manhwa-info';
 
 export interface LibrairyInfo {

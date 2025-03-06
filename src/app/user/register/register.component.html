@@ -1,0 +1,112 @@
+<div
+  class="responsive-logo position-absolute top-0 start-50 translate-middle-x"
+>
+  <img class="img-fluid" src="../../../assets/img/logo-text-bgwhite.png" />
+</div>
+
+<section class="bg-img d-flex align-items-center">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="responsive-size col-lg-6 bg-white p-5 mt-5">
+        <div>
+          <a class="d-flex flex-column align-items-center">
+            <img
+              src="../../../assets/img/SVG/profile.svg"
+              width="50"
+              height="50"
+            />
+          </a>
+          <h1
+            class="text-center text-uppercase color-main font-architects-daughter mt-2"
+          >
+            Bienvenue !
+          </h1>
+        </div>
+        <form
+          class="mx-sm-5 mt-sm-5 px-sm-4"
+          (ngSubmit)="register()"
+          [formGroup]="registerForm"
+        >
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              id="email"
+              aria-describedby="emailHelp"
+              required
+            />
+            @if (submitted && f['email'].errors) { @if
+            (f['email'].errors['required']) {
+            <small>Email requis</small>; } @if (f['email'].errors['email']) {
+            <small>Email non valide</small>; } }
+          </div>
+          <div class="form-group">
+            <label for="username">Nom d'utilisateur</label>
+            <input
+              type="username"
+              formControlName="username"
+              class="form-control"
+              id="username"
+              aria-describedby="username"
+              required
+            />
+
+            @if (submitted && f['username'].errors) { @if
+            (f['username'].errors['required']) {
+            <small>Nom d'utilisateur requis</small>; } }
+          </div>
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input
+              type="password"
+              formControlName="password"
+              class="form-control"
+              id="password"
+              required
+            />
+
+            @if (submitted && f['password'].errors) { @if
+            (f['password'].errors['required']) {
+            <small>Mot de passe requis</small>; } @if
+            (f['password'].errors['minlength']) {
+            <small
+              >Mot de passe doit faire plus de
+              {{ f["password"].errors["minlength"].requiredLength }}
+              lettres</small
+            >; } }
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmer mot de passe</label>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              class="form-control"
+              id="confirmPassword"
+              required
+            />
+
+            @if (submitted && f['confirmPassword'].errors) { @if
+            (f['confirmPassword'].errors['required']) {
+            <small>Confirmer mot de passe requis</small>; } @if
+            (f['confirmPassword'].errors['minlength']) {
+            <small
+              >Confirmer mot de passe doit faire plus de
+              {{ f["confirmPassword"].errors["minlength"].requiredLength }}
+              lettres</small
+            >; } @if (f['confirmPassword'].errors['confirmedValidator']) {
+            <small>Les mots de passes doivent être les mêmes</small>; } }
+          </div>
+          <div class="btn-div text-center mt-sm-5">
+            <button type="submit" class="btn btn-main">S'inscrire</button>
+            <div class="mt-2">
+              <a routerLink="/login" class="f-size14">J'ai déjà un compte</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
