@@ -1,63 +1,12 @@
 services:
-  watchtower:
-    image: containrrr/watchtower
-    command:
-      - "--label-enable"
-      - "--interval"
-      - "30"
-      - "--rolling-restart"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock      
-    
-  reverse-proxy:
-    image: traefik:v3.1
-    command:
-      - "--api.insecure=true" # Enable Traefik Dashboard
-      - "--providers.docker=true" # Enable Docker provider
-      - "--providers.docker.exposedbydefault=false" # Avoid exposing unwanted services
-      - "--entryPoints.web.address=:80" # HTTP EntryPoint
-      - "--entryPoints.websecure.address=:443" # HTTPS EntryPoint
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # Use TLS challenge
-      - "--certificatesresolvers.myresolver.acme.email=antonin.brines@outlook.fr"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--entryPoints.web.http.redirections.entryPoint.to=websecure" # Redirect HTTP to HTTPS
-      - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080" # Dashboard
-    volumes:
-      - letsencrypt:/letsencrypt
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    networks:
-      - traefik-public
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.abrines.fr`)"
-      - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
-      - "traefik.http.routers.traefik-dashboard.service=api@internal"
-      - "traefik.http.routers.traefik-dashboard.tls.certresolver=myresolver"
-      - "traefik.http.routers.traefik-dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicAuth.users=kemonas:$$apr1$$YrCtV30e$$.n6Zd5OJXTyM5TjgMI6H50"
-
   manhwa-front:
-    image: ghcr.io/antobrines/front-manhwa:latest
+    image: manhwa-front
+    build:
+      context: .
+      dockerfile: Dockerfile
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.manhwa-front.rule=Host(`manhwa.abrines.fr`)"
-      - "traefik.http.routers.manhwa-front.entrypoints=websecure"
-      - "traefik.http.routers.manhwa-front.tls.certresolver=myresolver"
-      - "traefik.http.routers.manhwa-front-redirect.rule=Host(`manhwa.abrines.fr`)"
-      - "traefik.http.routers.manhwa-front-redirect.entrypoints=web"
-      - "traefik.http.routers.manhwa-front-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "com.centurylinklabs.watchtower.enable=true"
-    networks:
-      - traefik-public
-
-volumes:
-  letsencrypt:
-
-networks:
-  traefik-public:
-    external: true
+      - traefik.enable=true
+      - traefik.http.routers.manhwa-front.rule=Host(`manhwa.abrines.fr`)
+      - traefik.http.routers.manhwa-front.entrypoints=websecure
+      - traefik.http.routers.manhwa-front.tls=true
+      - traefik.http.services.manhwa-front.loadbalancer.server.port=80

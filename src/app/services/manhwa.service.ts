@@ -65,7 +65,7 @@ export class ManhwaService {
       params.apiname = 'mangadex';
     }
     return this.http
-      .get<Response<ManhwaList>>(environment.backUrl + 'manhwas', {
+      .get<Response<ManhwaList>>('/api/manhwas', {
         params,
       })
       .pipe(
@@ -84,7 +84,7 @@ export class ManhwaService {
 
   public getOne(id: string): Observable<Manhwa> {
     return this.http
-      .get<Response<Manhwa>>(environment.backUrl + 'manhwas/' + id, {
+      .get<Response<Manhwa>>('/api/manhwas/' + id, {
         params: { apiname: this.apiName },
       })
       .pipe(
@@ -97,7 +97,7 @@ export class ManhwaService {
 
   public getCategories(): Observable<Category[]> {
     return this.http
-      .get<Response<Category[]>>(environment.backUrl + 'categories', {
+      .get<Response<Category[]>>('/api/categories', {
         params: { apiname: this.apiName },
       })
       .pipe(

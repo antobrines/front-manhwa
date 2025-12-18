@@ -145,7 +145,7 @@ export class LibrairyComponent implements OnInit, OnDestroy {
     if (!url) {
       return '';
     }
-    return `${environment.backUrl}proxy-image?url=${encodeURIComponent(url)}`;
+    return `/api/proxy-image?url=${encodeURIComponent(url)}`;
   }
 
   public changeIsList() {

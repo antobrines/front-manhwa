@@ -4,11 +4,11 @@ import { firstValueFrom, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ResponseService } from './response.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private logoutSubject = new Subject<void>();
@@ -23,10 +23,7 @@ export class AuthService {
 
   async login(data: any): Promise<boolean> {
     try {
-      const request = this.http.post(
-        environment.backUrl + 'users/login',
-        data
-      );
+      const request = this.http.post('/api/users/login', data);
       const dataRequest: any = await firstValueFrom(request);
       localStorage.setItem('token', dataRequest.body);
       this.responseS.SuccessF(dataRequest);
@@ -40,7 +37,7 @@ export class AuthService {
   async register(data: any): Promise<boolean> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
-    const request = this.http.post(environment.backUrl + 'users/register', data);
+    const request = this.http.post('/api/users/register', data);
     try {
       const res = await firstValueFrom(request);
       this.responseS.SuccessF(res);

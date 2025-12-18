@@ -18,19 +18,17 @@ export class LibrairyService {
   constructor(private http: HttpClient) {}
 
   public getAll(): Observable<Librairy[]> {
-    return this.http
-      .get<Response<Librairy[]>>(environment.backUrl + 'librairies')
-      .pipe(
-        tap((librairies: Response<Librairy[]>) => {
-          this.librairies.set(librairies.body);
-        }),
-        map((response: Response<Librairy[]>) => response.body)
-      );
+    return this.http.get<Response<Librairy[]>>('/api/librairies').pipe(
+      tap((librairies: Response<Librairy[]>) => {
+        this.librairies.set(librairies.body);
+      }),
+      map((response: Response<Librairy[]>) => response.body)
+    );
   }
 
   public getOne(id: string, sort?: string): Observable<LibrairyInfo> {
     return this.http
-      .get<Response<LibrairyInfo>>(environment.backUrl + 'librairies/' + id, {
+      .get<Response<LibrairyInfo>>('/api/librairies/' + id, {
         params: {
           sort: sort || 'nbChapterViewedDesc',
         },
@@ -47,14 +45,11 @@ export class LibrairyService {
     id: string,
     manhwaId: string
   ): Observable<any> {
-    return this.http.delete(
-      environment.backUrl + 'librairies/' + id + '/manhwa/' + manhwaId,
-      {
-        params: {
-          apiName: this.manhwaService.apiName,
-        },
-      }
-    );
+    return this.http.delete('/api/librairies/' + id + '/manhwa/' + manhwaId, {
+      params: {
+        apiName: this.manhwaService.apiName,
+      },
+    });
   }
 
   public updateManhwaFromLibrairy(
@@ -63,8 +58,7 @@ export class LibrairyService {
     manhwaId: string
   ): Observable<any> {
     return this.http.put(
-      environment.backUrl +
-        'librairies/' +
+      '/api/librairies/' +
         fromList +
         '/manhwa/' +
         manhwaId +
@@ -79,45 +73,34 @@ export class LibrairyService {
   }
 
   public addManhwaToLibrairy(id: string, manhwaId: string): Observable<any> {
-    return this.http.post(
-      environment.backUrl + 'librairies/' + id + '/manhwa/' + manhwaId,
-      {
-        params: {
-          apiName: this.manhwaService.apiName,
-        },
-      }
-    );
+    return this.http.post('/api/librairies/' + id + '/manhwa/' + manhwaId, {
+      params: {
+        apiName: this.manhwaService.apiName,
+      },
+    });
   }
 
   public getManhwasFromLibrairy(): Observable<string[]> {
-    return this.http
-      .get<Response<string[]>>(environment.backUrl + 'librairies/manhwas')
-      .pipe(
-        tap((manhwas: Response<string[]>) => {
-          this.manhwasLibrairy.set(manhwas.body);
-        }),
-        map((response: Response<string[]>) => response.body)
-      );
+    return this.http.get<Response<string[]>>('/api/librairies/manhwas').pipe(
+      tap((manhwas: Response<string[]>) => {
+        this.manhwasLibrairy.set(manhwas.body);
+      }),
+      map((response: Response<string[]>) => response.body)
+    );
   }
 
   public updateNbChapterViewed(
     id: string,
     nbChapterViewed: number
   ): Observable<any> {
-    return this.http.put(
-      environment.backUrl + 'manhwas-personnal/' + id + '/chapters',
-      {
-        nbChapterViewed,
-      }
-    );
+    return this.http.put('/api/manhwas-personnal/' + id + '/chapters', {
+      nbChapterViewed,
+    });
   }
 
   public updateUrl(id: string, url: string): Observable<any> {
-    return this.http.put(
-      environment.backUrl + 'manhwas-personnal/' + id + '/url',
-      {
-        url,
-      }
-    );
+    return this.http.put('/api/manhwas-personnal/' + id + '/url', {
+      url,
+    });
   }
 }

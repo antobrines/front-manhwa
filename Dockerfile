@@ -1,12 +1,12 @@
-FROM node:latest AS build
+FROM node:20-alpine AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json* ./
 RUN npm ci
-COPY . . 
-RUN npm run build --prod
+COPY . .
+RUN npm run build
 
-FROM nginx:latest
+FROM nginx:alpine
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/real-front/browser /usr/share/nginx/html
-EXPOSE 4200
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

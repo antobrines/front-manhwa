@@ -89,6 +89,6 @@ export class HomeComponent implements OnInit {
     if (!url) {
       return '';
     }
-    return `${environment.backUrl}proxy-image?url=${encodeURIComponent(url)}`;
+    return `/api/proxy-image?url=${encodeURIComponent(url)}`;
   }
 }
